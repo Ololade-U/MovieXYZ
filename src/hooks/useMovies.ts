@@ -23,7 +23,6 @@ const useMovies = () => {
     apiClient
       .get<FetchMovieResponse>("/movie/now_playing", { signal: controller.signal })
       .then((res) => {
-        console.log(res.data);
         setMovies(res.data.results);
       })
       .catch((err) => {
