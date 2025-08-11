@@ -12,9 +12,10 @@ const App = () => {
     setClicked(true);
   };
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  const [searchParam, setSearchParam] = useState<string | undefined>('')
 
   const { genres } = useGenres();
-  const { movies, error, isLoading } = useMovies(selectedGenre);
+  const { movies, error, isLoading, filteredData } = useMovies(selectedGenre, searchParam);
 
   return (
     <>
@@ -35,8 +36,13 @@ const App = () => {
           overflow={"hidden"}
           height={"13vh"}
           borderBottom={"1px solid #e3e3e3"}
+          pos={{mdDown : 'fixed'}}
+          w={'100%'}
+          top={0}
+          zIndex={'20'}
+          bgColor={{_dark : 'black', _light : 'white'}}
         >
-          <NavBar onClick={handleClick} />
+          <NavBar onChange={(searchRef) => setSearchParam(searchRef)} onClick={handleClick} />
         </GridItem>
         <GridItem
           hideBelow={"md"}
@@ -48,7 +54,9 @@ const App = () => {
         >
           <GenreList
             genres={genres}
-            onSelectGenre={(genres) => setSelectedGenre(genres)}
+            onSelectGenre={(genres) => {setSelectedGenre(genres)
+              setSearchParam('')
+            } }
           />
         </GridItem>
         <GridItem
@@ -57,8 +65,9 @@ const App = () => {
           overflowY={"scroll"}
           scrollbar={"hidden"}
           height={{ mdTo2xl: "87vh" }}
+          mt={{mdDown : '5.5rem'}}
         >
-          <MovieGrid movies={movies} error={error} isLoading={isLoading} />
+          <MovieGrid filteredData={filteredData} movies={movies} error={error} isLoading={isLoading} />
         </GridItem>
       </Grid>
       {isClicked && (
@@ -114,7 +123,7 @@ const App = () => {
               key={genre.id}
               w={"100%"}
               p={".05rem 1.5rem"}
-              onClick={() => console.log(genre)}
+              onClick={() => setSelectedGenre(genre)}
               _hover={{
                 transform: "scale(1.03)",
                 _dark: { borderBottom: "1px solid #282828ff" },

@@ -1,5 +1,6 @@
-import useGenres, { type Genre } from "@/hooks/useGenre";
-import { Button, Stack, Text } from "@chakra-ui/react";
+import
+ { type Genre } from "@/hooks/useGenre";
+import { Stack, Text } from "@chakra-ui/react";
 
 interface Prop{
   genres : Genre[]

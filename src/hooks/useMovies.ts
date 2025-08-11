@@ -15,10 +15,14 @@ interface FetchMovieResponse {
   results: Movies[];
 }
 
-const useMovies = (selectedGenre: Genre | null) => {
+const useMovies = (
+  selectedGenre: Genre | null,
+  searchParam: string | undefined
+) => {
   const [movies, setMovies] = useState<Movies[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [filteredData, setFilteredData] = useState<Movies[]>([])
 
   useEffect(() => {
     const controller = new AbortController();
@@ -39,10 +43,14 @@ const useMovies = (selectedGenre: Genre | null) => {
         setLoading(false);
       });
 
-    return () => controller.abort();
-  }, [selectedGenre?.id]);
+      if(searchParam?.length !== undefined)
+        searchParam?.length > 0   && setFilteredData(movies.filter((movie) => movie.title.toLowerCase().includes(searchParam.toLowerCase()))) 
 
-  return { movies, error, isLoading };
+      console.log(filteredData)
+    return () => controller.abort();
+  }, [selectedGenre?.id, searchParam]);
+
+  return { movies, error, isLoading, filteredData };
 };
 
 export default useMovies;

@@ -1,19 +1,23 @@
-import { Box, Field, Heading, HStack, Image, Input } from "@chakra-ui/react";
-import logo from "../assets/logo.webp";
+import { Box, Field, Heading, HStack, Input } from "@chakra-ui/react";
 import { ColorModeButton } from "./ui/color-mode";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { useRef, type RefObject } from "react";
 
 interface Prop {
   onClick: () => void;
+  onChange: (searchRef : string | undefined) => void
 }
 
-const NavBar = ({ onClick }: Prop) => {
+const NavBar = ({ onClick, onChange }: Prop) => {
+
+  const searchRef = useRef<HTMLInputElement>(null)
   return (
     <HStack
       justifyContent={"space-between"}
       h={"100%"}
       alignItems={"center"}
       p={"0 1rem"}
+      w={'100%'}
     >
       <HStack alignItems={"center"}>
         <Box hideFrom={"md"}>
@@ -28,7 +32,7 @@ const NavBar = ({ onClick }: Prop) => {
         </Heading>
       </HStack>
       <Field.Root w={'60%'}>
-        <Input p={'0 1rem'} borderRadius={'.7rem'} placeholder="Search" />
+        <Input ref={searchRef} onChange={() => onChange(searchRef.current?.value)} p={'0 1rem'} borderRadius={'.7rem'} placeholder="Search" />
       </Field.Root>
       <ColorModeButton />
     </HStack>
