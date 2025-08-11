@@ -3,3 +3,16 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+
+@keyframes open {
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes close {
+  100% {
+    left: -70vw;
+  }
+}

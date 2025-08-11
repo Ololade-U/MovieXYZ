@@ -7,7 +7,6 @@ const Landing = () => {
   useGenres()
   return (
     <>
-      {/* {console.log(movies[randomIndex].poster_path)} */}
       <Box
         height={"100vh"}
         bgSize={"cover"}
