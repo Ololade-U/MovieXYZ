@@ -9,6 +9,8 @@ export interface Movies {
   release_date: string;
   poster_path: string;
   backdrop_path: string;
+  name : string;
+  first_air_date : string
 }
 
 interface FetchMovieResponse {
@@ -17,19 +19,20 @@ interface FetchMovieResponse {
 
 const useMovies = (
   selectedGenre: Genre | null,
-  searchParam: string | undefined
+  searchParam: string | undefined,
+  endpoint: string
 ) => {
   const [movies, setMovies] = useState<Movies[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState<Movies[]>([])
+  const [filteredData, setFilteredData] = useState<Movies[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
 
     setLoading(true);
     apiClient
-      .get<FetchMovieResponse>("discover/movie", {
+      .get<FetchMovieResponse>(endpoint, {
         signal: controller.signal,
         params: { with_genres: selectedGenre?.id },
       })
@@ -43,12 +46,19 @@ const useMovies = (
         setLoading(false);
       });
 
-      if(searchParam?.length !== undefined)
-        searchParam?.length > 0   && setFilteredData(movies.filter((movie) => movie.title.toLowerCase().includes(searchParam.toLowerCase()))) 
+    if (searchParam?.length !== undefined) {
+      searchParam?.length > 0 &&
+        setFilteredData(
+          movies.filter((movie) =>
+            movie.title?
+            movie.title.toLowerCase().includes(searchParam.toLowerCase()):
+            movie.name.toLowerCase().includes(searchParam.toLowerCase())
+          )
+        );
+    }
 
-      console.log(filteredData)
     return () => controller.abort();
-  }, [selectedGenre?.id, searchParam]);
+  }, [selectedGenre?.id, searchParam, endpoint]);
 
   return { movies, error, isLoading, filteredData };
 };

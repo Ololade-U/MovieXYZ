@@ -1,21 +1,37 @@
-import { Box, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GenreList from "./components/GenreList";
 import MovieGrid from "./components/MovieGrid";
-import { useState } from "react";
+import {useState } from "react";
 import useGenres, { type Genre } from "./hooks/useGenre";
 import useMovies from "./hooks/useMovies";
 
 const App = () => {
+  const Types = ["Movie", "Tv Shows"];
   const [isClicked, setClicked] = useState(false);
   const handleClick = () => {
     setClicked(true);
   };
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  const [searchParam, setSearchParam] = useState<string | undefined>('')
-
+  const [searchParam, setSearchParam] = useState<string | undefined>("");
+  const [selected, setSelected] = useState("Movie");
   const { genres } = useGenres();
-  const { movies, error, isLoading, filteredData } = useMovies(selectedGenre, searchParam);
+  // const [endpoint, setEndpoint] = useState("discover/movie");
+
+  const endpoint = selected !== "Movie" ? "discover/tv" : "discover/movie";
+
+  const { movies, error, isLoading, filteredData } = useMovies(
+    selectedGenre,
+    searchParam,
+    endpoint
+  );
+  // console.log(selected)
 
   return (
     <>
@@ -36,13 +52,16 @@ const App = () => {
           overflow={"hidden"}
           height={"13vh"}
           borderBottom={"1px solid #e3e3e3"}
-          pos={{mdDown : 'fixed'}}
-          w={'100%'}
+          pos={{ mdDown: "fixed" }}
+          w={"100%"}
           top={0}
-          zIndex={'20'}
-          bgColor={{_dark : 'black', _light : 'white'}}
+          zIndex={"20"}
+          bgColor={{ _dark: "black", _light: "white" }}
         >
-          <NavBar onChange={(searchRef) => setSearchParam(searchRef)} onClick={handleClick} />
+          <NavBar
+            onSubmit={(searchRef) => setSearchParam(searchRef)}
+            onClick={handleClick}
+          />
         </GridItem>
         <GridItem
           hideBelow={"md"}
@@ -54,9 +73,10 @@ const App = () => {
         >
           <GenreList
             genres={genres}
-            onSelectGenre={(genres) => {setSelectedGenre(genres)
-              setSearchParam('')
-            } }
+            onSelectGenre={(genres) => {
+              setSelectedGenre(genres);
+              setSearchParam("");
+            }}
           />
         </GridItem>
         <GridItem
@@ -65,9 +85,24 @@ const App = () => {
           overflowY={"scroll"}
           scrollbar={"hidden"}
           height={{ mdTo2xl: "87vh" }}
-          mt={{mdDown : '5.5rem'}}
+          mt={{ mdDown: "5.5rem", mdTo2xl : '1rem' }}
         >
-          <MovieGrid filteredData={filteredData} movies={movies} error={error} isLoading={isLoading} />
+          <select
+            onClick={(e) => {
+              console.log(e.currentTarget.value);
+              setSelected(e.currentTarget.value);
+            }}
+          >
+            {Types.map((type) => (
+              <option value={type} key={type}>{type}</option>
+            ))}
+          </select>
+          <MovieGrid
+            filteredData={searchParam ? filteredData : movies}
+            movies={movies}
+            error={error}
+            isLoading={isLoading}
+          />
         </GridItem>
       </Grid>
       {isClicked && (

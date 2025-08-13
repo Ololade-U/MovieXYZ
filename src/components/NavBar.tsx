@@ -1,23 +1,23 @@
-import { Box, Field, Heading, HStack, Input } from "@chakra-ui/react";
+import { Box, Heading, HStack, Input } from "@chakra-ui/react";
 import { ColorModeButton } from "./ui/color-mode";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useRef, type RefObject } from "react";
+import { useRef } from "react";
 
 interface Prop {
   onClick: () => void;
-  onChange: (searchRef : string | undefined) => void
+  onSubmit: (searchRef: string | undefined) => void;
 }
 
-const NavBar = ({ onClick, onChange }: Prop) => {
+const NavBar = ({ onClick, onSubmit }: Prop) => {
 
-  const searchRef = useRef<HTMLInputElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null);
   return (
     <HStack
       justifyContent={"space-between"}
       h={"100%"}
       alignItems={"center"}
       p={"0 1rem"}
-      w={'100%'}
+      w={"100%"}
     >
       <HStack alignItems={"center"}>
         <Box hideFrom={"md"}>
@@ -31,9 +31,24 @@ const NavBar = ({ onClick, onChange }: Prop) => {
           MovieXYZ
         </Heading>
       </HStack>
-      <Field.Root w={'60%'}>
-        <Input ref={searchRef} onChange={() => onChange(searchRef.current?.value)} p={'0 1rem'} borderRadius={'.7rem'} placeholder="Search" />
-      </Field.Root>
+
+      <form
+        action=""
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (searchRef.current) {
+            onSubmit(searchRef.current.value);
+            console.log(searchRef.current.value);
+          }
+        }}
+      >
+        <Input
+          ref={searchRef}
+          p={"0 1rem"}
+          borderRadius={".7rem"}
+          placeholder="Search"
+        />
+      </form>
       <ColorModeButton />
     </HStack>
   );

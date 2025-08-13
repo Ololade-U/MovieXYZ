@@ -7,13 +7,15 @@ interface Prop {
 
 const MovieCard = ({ movie }: Prop) => {
   return (
+    <>
     <Card.Root borderRadius={'1rem'} overflow={'hidden'} p={'1rem'} >
         <Image objectFit={'contain'} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} w={'100%'}/>
       <Card.Body p={0}>
-        <Heading fontSize={'1xl'}>{movie.title}</Heading>
-        <Text>{movie.release_date}</Text>
+        <Heading fontSize={'1xl'}>{movie.title ? movie.title : movie.name}</Heading>
+        <Text>{movie.release_date ? movie.release_date : movie.first_air_date}</Text>
       </Card.Body>
     </Card.Root>
+    </>
   );
 };
 
