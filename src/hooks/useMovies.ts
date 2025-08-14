@@ -1,7 +1,6 @@
 import apiClient from "@/services/api-client";
-import { CanceledError } from "axios";
-import { useEffect, useState } from "react";
 import type { Genre } from "./useGenre";
+import { useQuery } from "@tanstack/react-query";
 
 export interface Movies {
   id: number;
@@ -9,58 +8,46 @@ export interface Movies {
   release_date: string;
   poster_path: string;
   backdrop_path: string;
-  name : string;
-  first_air_date : string
+  name: string;
+  first_air_date: string;
 }
 
-interface FetchMovieResponse {
+export interface FetchMovieResponse {
   results: Movies[];
+  total_pages: number;
 }
+
+// const [filteredData, setFilteredData] = useState<Movies[]>([])
 
 const useMovies = (
   selectedGenre: Genre | null,
+  endpoint: string,
   searchParam: string | undefined,
-  endpoint: string
+  page : number
 ) => {
-  const [movies, setMovies] = useState<Movies[]>([]);
-  const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState<Movies[]>([]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    apiClient
-      .get<FetchMovieResponse>(endpoint, {
-        signal: controller.signal,
-        params: { with_genres: selectedGenre?.id },
-      })
-      .then((res) => {
-        setMovies(res.data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setError(err.message);
-        setLoading(false);
-      });
-
-    if (searchParam?.length !== undefined) {
-      searchParam?.length > 0 &&
-        setFilteredData(
-          movies.filter((movie) =>
-            movie.title?
-            movie.title.toLowerCase().includes(searchParam.toLowerCase()):
-            movie.name.toLowerCase().includes(searchParam.toLowerCase())
-          )
-        );
-    }
-
-    return () => controller.abort();
-  }, [selectedGenre?.id, searchParam, endpoint]);
-
-  return { movies, error, isLoading, filteredData };
+  const { data, error, isLoading } = useQuery<
+    Movies[],
+    Error,
+    Movies[]
+  >({
+    queryKey: ["movies", selectedGenre, endpoint, page],
+    queryFn: () =>
+      apiClient
+        .get<FetchMovieResponse>(endpoint, {
+          params: { with_genres: selectedGenre?.id, page: page },
+        })
+        .then((res) => res.data.results),
+        staleTime: 60 * 30 * 1000, //30mins
+  });
+  const filteredData =
+    searchParam?.length !== undefined
+      ? data?.filter((movie) =>
+          movie.title
+            ? movie.title.toLowerCase().includes(searchParam.toLowerCase())
+            : movie.name.toLowerCase().includes(searchParam.toLowerCase())
+        )
+      : data;
+  return { data, filteredData, error, isLoading };
 };
 
 export default useMovies;

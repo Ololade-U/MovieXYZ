@@ -1,21 +1,23 @@
 import { type Movies } from "@/hooks/useMovies";
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { Button, HStack, SimpleGrid, Text } from "@chakra-ui/react";
 import MovieCard from "./MovieCard";
 import MovieCardSkeleton from "./MovieCardSkeleton";
 
 interface Prop {
   movies: Movies[];
   isLoading: boolean;
-  error: string;
+  error: Error | null;
   filteredData: Movies[];
+  onNextPage : ()=> void,
+  onPrevPage : ()=> void
 }
 
-const MovieGrid = ({ movies, error, isLoading, filteredData }: Prop) => {
+const MovieGrid = ({ movies, error, isLoading, filteredData, onNextPage, onPrevPage }: Prop) => {
   const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
     <>
-      {error && <Text>{error}</Text>}
+      {error && <Text>{error.message}</Text>}
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 4 }}
         gap={"1rem"}
@@ -23,12 +25,16 @@ const MovieGrid = ({ movies, error, isLoading, filteredData }: Prop) => {
       >
         {isLoading &&
           Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)}
-        {filteredData.length > 0
+        {filteredData?.length > 0
           ? filteredData.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))
           : movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
       </SimpleGrid>
+      <HStack mt={'1rem'} justifyContent={'center'}>
+        <Button onClick={() => onPrevPage()} variant={'outline'} p={'.4rem .6rem'}>Prev Page</Button>
+        <Button onClick={() => onNextPage()} variant={'outline'} p={'.4rem .6rem'}>Next Page</Button>
+      </HStack>
     </>
   );
 };

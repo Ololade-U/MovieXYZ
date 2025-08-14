@@ -1,14 +1,8 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GenreList from "./components/GenreList";
 import MovieGrid from "./components/MovieGrid";
-import {useState } from "react";
+import { useState } from "react";
 import useGenres, { type Genre } from "./hooks/useGenre";
 import useMovies from "./hooks/useMovies";
 
@@ -21,17 +15,20 @@ const App = () => {
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   const [searchParam, setSearchParam] = useState<string | undefined>("");
   const [selected, setSelected] = useState("Movie");
-  const { genres } = useGenres();
-  // const [endpoint, setEndpoint] = useState("discover/movie");
+  const { data : genres } = useGenres();
+  const [page, setPage] = useState(1)
+
+  const onNextPage = ()=>{
+    setPage(page + 1)
+  }
+
+  const onPrevPage = ()=>{
+    setPage(page > 1 ? page - 1 : page)
+  }
 
   const endpoint = selected !== "Movie" ? "discover/tv" : "discover/movie";
 
-  const { movies, error, isLoading, filteredData } = useMovies(
-    selectedGenre,
-    searchParam,
-    endpoint
-  );
-  // console.log(selected)
+  const { filteredData, data: movies, error, isLoading } = useMovies(selectedGenre, endpoint, searchParam, page);
 
   return (
     <>
@@ -85,7 +82,7 @@ const App = () => {
           overflowY={"scroll"}
           scrollbar={"hidden"}
           height={{ mdTo2xl: "87vh" }}
-          mt={{ mdDown: "5.5rem", mdTo2xl : '1rem' }}
+          mt={{ mdDown: "5.5rem", mdTo2xl: "1rem" }}
         >
           <select
             onClick={(e) => {
@@ -94,15 +91,21 @@ const App = () => {
             }}
           >
             {Types.map((type) => (
-              <option value={type} key={type}>{type}</option>
+              <option value={type} key={type}>
+                {type}
+              </option>
             ))}
           </select>
-          <MovieGrid
-            filteredData={searchParam ? filteredData : movies}
-            movies={movies}
-            error={error}
-            isLoading={isLoading}
-          />
+          {filteredData && movies && error !== undefined && (
+            <MovieGrid
+              filteredData={searchParam ? filteredData : movies}
+              movies={movies}
+              error={error}
+              isLoading={isLoading}
+              onNextPage={onNextPage}
+              onPrevPage={onPrevPage}
+            />
+          )}
         </GridItem>
       </Grid>
       {isClicked && (
@@ -150,7 +153,7 @@ const App = () => {
           gap={"1.3rem"}
           p={"1.5rem 0"}
         >
-          {genres.map((genre) => (
+          {genres?.map((genre) => (
             <Text
               cursor={"pointer"}
               color={{ _dark: "white", _light: "black" }}

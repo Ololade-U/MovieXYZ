@@ -3,7 +3,7 @@ import
 import { Stack, Text } from "@chakra-ui/react";
 
 interface Prop{
-  genres : Genre[]
+  genres : Genre[] | undefined
   onSelectGenre : (genre : Genre)=> void
 }
 
@@ -11,7 +11,7 @@ const GenreList = ({genres, onSelectGenre} : Prop) => {
   // const { genres } = useGenres();
   return (
     <Stack w={"100%"} alignItems={"flex-start"} gap={"1.3rem"}>
-      {genres.map((genre) => (
+      {genres?.map((genre) => (
         <Text
           cursor={"pointer"}
           color={{ _dark: "white", _light: "black" }}
