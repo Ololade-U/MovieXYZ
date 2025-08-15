@@ -5,30 +5,37 @@ import MovieGrid from "./components/MovieGrid";
 import { useState } from "react";
 import useGenres, { type Genre } from "./hooks/useGenre";
 import useMovies from "./hooks/useMovies";
+import EmptyPage from "./components/EmptyPage";
+import Footer from "./components/Footer";
 
 const App = () => {
   const Types = ["Movie", "Tv Shows"];
   const [isClicked, setClicked] = useState(false);
   const handleClick = () => {
-    setClicked(true);
+    isClicked == false ? setClicked(true) : setClicked(false);
   };
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   const [searchParam, setSearchParam] = useState<string | undefined>("");
   const [selected, setSelected] = useState("Movie");
-  const { data : genres } = useGenres();
-  const [page, setPage] = useState(1)
+  const { data: genres } = useGenres();
+  const [page, setPage] = useState(1);
 
-  const onNextPage = ()=>{
-    setPage(page + 1)
-  }
+  const onNextPage = () => {
+    setPage(page + 1);
+  };
 
-  const onPrevPage = ()=>{
-    setPage(page > 1 ? page - 1 : page)
-  }
+  const onPrevPage = () => {
+    setPage(page > 1 ? page - 1 : page);
+  };
 
   const endpoint = selected !== "Movie" ? "discover/tv" : "discover/movie";
 
-  const { filteredData, data: movies, error, isLoading } = useMovies(selectedGenre, endpoint, searchParam, page);
+  const {
+    filteredData,
+    data: movies,
+    error,
+    isLoading,
+  } = useMovies(selectedGenre, endpoint, searchParam, page);
 
   return (
     <>
@@ -73,6 +80,7 @@ const App = () => {
             onSelectGenre={(genres) => {
               setSelectedGenre(genres);
               setSearchParam("");
+              setPage(1)
             }}
           />
         </GridItem>
@@ -96,6 +104,7 @@ const App = () => {
               </option>
             ))}
           </select>
+          {movies?.length == 0 && <EmptyPage />}
           {filteredData && movies && error !== undefined && (
             <MovieGrid
               filteredData={searchParam ? filteredData : movies}
@@ -106,12 +115,13 @@ const App = () => {
               onPrevPage={onPrevPage}
             />
           )}
+          <Footer/>
         </GridItem>
       </Grid>
       {isClicked && (
         <Text
-          pos={"absolute"}
-          top={0}
+          pos={"fixed"}
+          top={"13vh"}
           left={0}
           width={"100vw"}
           height={"100vh"}
@@ -124,8 +134,8 @@ const App = () => {
       )}
       <Box
         hideFrom={"md"}
-        pos={isClicked ? "absolute" : "fixed"}
-        top={0}
+        pos={"fixed"}
+        top={"13vh"}
         left={"-75vw"}
         width={"65vw"}
         height={"100vh"}
@@ -143,7 +153,7 @@ const App = () => {
             : {
                 animation: "open .5s ease-in",
                 animationFillMode: "forwards",
-                animationDirection: "reverse",
+                animationDirection: "normal",
               }
         }
       >
@@ -161,7 +171,11 @@ const App = () => {
               key={genre.id}
               w={"100%"}
               p={".05rem 1.5rem"}
-              onClick={() => setSelectedGenre(genre)}
+              onClick={() => {
+                setSelectedGenre(genre);
+                handleClick();
+                setPage(1)
+              }}
               _hover={{
                 transform: "scale(1.03)",
                 _dark: { borderBottom: "1px solid #282828ff" },
