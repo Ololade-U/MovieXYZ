@@ -35,10 +35,12 @@ const App = () => {
     data: movies,
     error,
     isLoading,
+    isRefetching
   } = useMovies(selectedGenre, endpoint, searchParam, page);
 
   return (
     <>
+    {console.log(isLoading)}
       <Grid
         templateAreas={{
           mdTo2xl: `"nav nav" "aside main"`,
@@ -111,6 +113,7 @@ const App = () => {
               movies={movies}
               error={error}
               isLoading={isLoading}
+              isRefetching={isRefetching}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
             />

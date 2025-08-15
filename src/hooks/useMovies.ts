@@ -27,10 +27,9 @@ const useMovies = (
   searchParam: string | undefined,
   page : number
 ) => {
-  const { data, error, isLoading } = useQuery<
+  const { data, error, isLoading, isRefetching} = useQuery<
     Movies[],
-    Error,
-    Movies[]
+    Error
   >({
     queryKey: ["movies", selectedGenre, endpoint, page],
     queryFn: () =>
@@ -49,7 +48,8 @@ const useMovies = (
             : movie.name.toLowerCase().includes(searchParam.toLowerCase())
         )
       : data;
-  return { data, filteredData, error, isLoading };
+      console.log(isLoading)
+  return { data, filteredData, error, isLoading, isRefetching };
 };
 
 export default useMovies;

@@ -6,14 +6,23 @@ import MovieCardSkeleton from "./MovieCardSkeleton";
 interface Prop {
   movies: Movies[];
   isLoading: boolean;
+  isRefetching: boolean;
   error: Error | null;
   filteredData: Movies[];
-  onNextPage : ()=> void,
-  onPrevPage : ()=> void
+  onNextPage: () => void;
+  onPrevPage: () => void;
 }
 
-const MovieGrid = ({ movies, error, isLoading, filteredData, onNextPage, onPrevPage }: Prop) => {
-  const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8];
+const MovieGrid = ({
+  movies,
+  isRefetching,
+  error,
+  isLoading,
+  filteredData,
+  onNextPage,
+  onPrevPage,
+}: Prop) => {
+  const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
   return (
     <>
@@ -23,17 +32,32 @@ const MovieGrid = ({ movies, error, isLoading, filteredData, onNextPage, onPrevP
         gap={"1rem"}
         padding={"1rem 1rem 0 .5rem"}
       >
-        {isLoading &&
-          Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)}
+        {isLoading
+          ? Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)
+          : isRefetching
+          ? Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)
+          : ""}
         {filteredData?.length > 0
           ? filteredData.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))
           : movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
       </SimpleGrid>
-      <HStack mt={'1rem'} justifyContent={'center'}>
-        <Button onClick={() => onPrevPage()} variant={'outline'} p={'.4rem .6rem'}>Prev Page</Button>
-        <Button onClick={() => onNextPage()} variant={'outline'} p={'.4rem .6rem'}>Next Page</Button>
+      <HStack mt={"1rem"} justifyContent={"center"}>
+        <Button
+          onClick={() => onPrevPage()}
+          variant={"outline"}
+          p={".4rem .6rem"}
+        >
+          Prev Page
+        </Button>
+        <Button
+          onClick={() => onNextPage()}
+          variant={"outline"}
+          p={".4rem .6rem"}
+        >
+          Next Page
+        </Button>
       </HStack>
     </>
   );
