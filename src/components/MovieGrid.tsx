@@ -11,6 +11,8 @@ interface Prop {
   filteredData: Movies[];
   onNextPage: () => void;
   onPrevPage: () => void;
+  endpoint : string;
+  page : number;
 }
 
 const MovieGrid = ({
@@ -21,6 +23,7 @@ const MovieGrid = ({
   filteredData,
   onNextPage,
   onPrevPage,
+  endpoint, 
 }: Prop) => {
   const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
@@ -39,9 +42,9 @@ const MovieGrid = ({
           : ""}
         {filteredData?.length > 0
           ? filteredData.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <MovieCard endpoint={endpoint} key={movie.id} movie={movie} />
             ))
-          : movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
+          : movies.map((movie) => <MovieCard endpoint={endpoint} key={movie.id} movie={movie} />)}
       </SimpleGrid>
       <HStack mt={"1rem"} justifyContent={"center"}>
         <Button

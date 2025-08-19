@@ -1,0 +1,37 @@
+import apiClient from "@/services/api-client";
+import { useQuery } from "@tanstack/react-query";
+import type { Genre } from "./useGenre";
+
+
+interface Details{
+    backdrop_path : string;
+    genres : Genre[];
+    overview : string;
+    poster_path : string;
+    release_date : string;
+    title : string;
+    id : number;
+    name : string;
+    runtime : number;
+    vote_average : number;
+    tagline : string
+    video : boolean
+}
+
+
+const useDetails = (
+    endpoint : string
+)=> {
+
+ return useQuery({
+    queryKey : ['details', endpoint],
+    queryFn : ()=>
+       apiClient
+          .get<Details>(endpoint)
+          .then((res) => res.data),
+    staleTime : 60 * 60 * 1000 //1hr
+  })
+
+}
+
+export default useDetails

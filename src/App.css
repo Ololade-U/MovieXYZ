@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body{
+  scrollbar-width: 0;
+}
+
 
 @keyframes open {
   100% {

@@ -22,10 +22,10 @@ export interface FetchMovieResponse {
 // const [filteredData, setFilteredData] = useState<Movies[]>([])
 
 const useMovies = (
-  selectedGenre: Genre | null,
   endpoint: string,
-  searchParam: string | undefined,
-  page : number
+  page: number | undefined,
+  selectedGenre?: Genre | null,
+  searchParam?: string | undefined,
 ) => {
   const { data, error, isLoading, isRefetching} = useQuery<
     Movies[],
@@ -34,11 +34,13 @@ const useMovies = (
     queryKey: ["movies", selectedGenre, endpoint, page],
     queryFn: () =>
       apiClient
-        .get<FetchMovieResponse>(endpoint, {
+        .get<FetchMovieResponse>(endpoint || 'discover/movie', {
           params: { with_genres: selectedGenre?.id, page: page },
         })
         .then((res) => res.data.results),
         staleTime: 60 * 30 * 1000, //30mins
+        refetchOnWindowFocus : false,
+        refetchOnMount : false,
   });
   const filteredData =
     searchParam?.length !== undefined
@@ -48,7 +50,6 @@ const useMovies = (
             : movie.name.toLowerCase().includes(searchParam.toLowerCase())
         )
       : data;
-      console.log(isLoading)
   return { data, filteredData, error, isLoading, isRefetching };
 };
 

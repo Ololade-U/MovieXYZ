@@ -36,11 +36,10 @@ const App = () => {
     error,
     isLoading,
     isRefetching
-  } = useMovies(selectedGenre, endpoint, searchParam, page);
+  } = useMovies(endpoint, page, selectedGenre, searchParam);
 
   return (
     <>
-    {console.log(isLoading)}
       <Grid
         templateAreas={{
           mdTo2xl: `"nav nav" "aside main"`,
@@ -96,7 +95,6 @@ const App = () => {
         >
           <select
             onClick={(e) => {
-              console.log(e.currentTarget.value);
               setSelected(e.currentTarget.value);
             }}
           >
@@ -116,6 +114,8 @@ const App = () => {
               isRefetching={isRefetching}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
+              endpoint={selected}
+              page={page}
             />
           )}
           <Footer/>
