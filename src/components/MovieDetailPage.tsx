@@ -50,6 +50,8 @@ const MovieDetailPage = () => {
     video.name.toLowerCase().includes("official trailer")
   );
 
+  // console.log(data?.seasons.length)
+
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1);
@@ -99,7 +101,7 @@ const MovieDetailPage = () => {
             <Stack gap={"1rem"} pos={"relative"}>
               <Stack pos={"relative"}>
                 <Heading fontSize={{ mdTo2xl: "3xl", mdDown: "2xl" }}>
-                  {data?.title || data?.name}({data?.release_date?.slice(0, 4)})
+                  {data?.title || data?.name}({data?.release_date?.slice(0, 4)||data?.first_air_date?.slice(0, 4)})
                 </Heading>
                 <Flex
                   gap={"1rem"}
@@ -119,7 +121,7 @@ const MovieDetailPage = () => {
                   >
                     PG-13
                   </Text>
-                  <Text fontWeight={"bold"}>{data?.release_date}</Text>
+                  <Text fontWeight={"bold"}>{data?.release_date || data?.first_air_date}</Text>
                   &bull;
                   <Flex>
                     {data?.genres.map((genre) => (
@@ -133,7 +135,7 @@ const MovieDetailPage = () => {
                     ))}
                   </Flex>
                   &bull;
-                  <Text>{time ? time : ""} </Text>
+                  <Text>{data?.runtime && time || `${data?.seasons.length} Seasons`}</Text>
                 </Flex>
               </Stack>
               <Flex gap={".7rem"} align={"center"}>

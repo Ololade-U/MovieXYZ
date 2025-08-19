@@ -7,6 +7,8 @@ import useGenres, { type Genre } from "./hooks/useGenre";
 import useMovies from "./hooks/useMovies";
 import EmptyPage from "./components/EmptyPage";
 import Footer from "./components/Footer";
+import useSearch from "./hooks/useSearch";
+
 
 const App = () => {
   const Types = ["Movie", "Tv Shows"];
@@ -18,25 +20,29 @@ const App = () => {
   const [searchParam, setSearchParam] = useState<string | undefined>("");
   const [selected, setSelected] = useState("Movie");
   const { data: genres } = useGenres();
-  const [page, setPage] = useState(1);
+   const [page, setPage] = useState(1);
 
   const onNextPage = () => {
-    setPage(page + 1);
+    setPage(page + 1)
   };
 
   const onPrevPage = () => {
     setPage(page > 1 ? page - 1 : page);
   };
+  
 
   const endpoint = selected !== "Movie" ? "discover/tv" : "discover/movie";
 
+  const searchEndpoint = selected !== "Movie" ? "search/tv" : "search/movie"
+
+  const {data : filteredData} = useSearch(searchEndpoint, page, searchParam)
+
   const {
-    filteredData,
     data: movies,
     error,
     isLoading,
     isRefetching
-  } = useMovies(endpoint, page, selectedGenre, searchParam);
+  } = useMovies(endpoint, page, selectedGenre);
 
   return (
     <>
@@ -96,6 +102,8 @@ const App = () => {
           <select
             onClick={(e) => {
               setSelected(e.currentTarget.value);
+              e.currentTarget.value == 'Tv Shows' && setSelectedGenre(null)
+              setSearchParam('')
             }}
           >
             {Types.map((type) => (

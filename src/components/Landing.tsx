@@ -3,6 +3,7 @@ import back from "../assets/mbg4.jpg";
 import { Link } from "react-router-dom";
 import useGenres from "@/hooks/useGenre";
 
+
 const Landing = () => {
   useGenres()
   return (
@@ -43,7 +44,7 @@ const Landing = () => {
             >
               Explore unlimited movies, <br /> TV shows and more
             </Heading>
-            <Link to={"/movies"}>
+            <Link to={`/movies`}>
               <Button
                 zIndex={"20"}
                 alignSelf={"center"}

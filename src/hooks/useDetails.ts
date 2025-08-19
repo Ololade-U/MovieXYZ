@@ -14,8 +14,10 @@ interface Details{
     name : string;
     runtime : number;
     vote_average : number;
-    tagline : string
-    video : boolean
+    tagline : string;
+    video : boolean;
+    first_air_date : string;
+    seasons : []
 }
 
 

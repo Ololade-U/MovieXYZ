@@ -38,7 +38,6 @@ const NavBar = ({ onClick, onSubmit }: Prop) => {
           e.preventDefault();
           if (searchRef.current) {
             onSubmit(searchRef.current.value);
-            console.log(searchRef.current.value);
           }
         }}
       >

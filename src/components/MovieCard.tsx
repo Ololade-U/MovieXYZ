@@ -12,6 +12,7 @@ import {
 
 import tomato from "../assets/icons8-tomato-48.png";
 import { Link } from "react-router-dom";
+import notFound from '../assets/not found.jpg'
 
 interface Prop {
   movie: Movies;
@@ -23,12 +24,20 @@ const MovieCard = ({ movie, endpoint }: Prop) => {
   return (
     <>
       <Card.Root borderRadius={"1rem"} overflow={"hidden"} p={"1rem"}>
+        {movie.poster_path ? 
         <Image
           pos={"relative"}
           objectFit={"contain"}
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           w={"100%"}
+        /> :
+        <Image
+          pos={"relative"}
+          objectFit={"contain"}
+          src={notFound}
+          w={"100%"}
         />
+      }
         <ProgressCircle.Root
           bgColor={
             rating && rating < 50
