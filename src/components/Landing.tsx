@@ -19,8 +19,6 @@ const Landing = () => {
           opacity={1}
           h={"100%"}
           zIndex={"20"}
-          gap={{ mdTo2xl: "8rem"}}
-          justifyContent={{mdDown : 'space-between'}}
           alignItems={"center"}
           p={{ mdTo2xl: "2rem 7rem", mdDown: "2rem 2rem" }}
         >
@@ -36,7 +34,7 @@ const Landing = () => {
               Sign up
             </Button>
           </HStack>
-          <Stack zIndex={"20"} color={"white"} alignItems={'center'}>
+          <Stack justifyContent={'center'} height={'100%'} zIndex={"20"} color={"white"} alignItems={'center'}>
             <Heading
               zIndex={"20"}
               fontSize={{ mdTo2xl: "5xl", mdDown: "3xl" }}
