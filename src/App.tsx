@@ -97,7 +97,7 @@ const App = () => {
           overflowY={"scroll"}
           scrollbar={"hidden"}
           height={{ mdTo2xl: "87vh" }}
-          mt={{ mdDown: "5.5rem", mdTo2xl: "1rem" }}
+          mt={{ mdDown: "6.1rem", mdTo2xl: "1rem" }}
         >
           <select
             onClick={(e) => {
