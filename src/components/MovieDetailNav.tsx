@@ -17,7 +17,6 @@ const MovieDetailNav = ({onBack} : Prop) => {
       height={"13vh"}
       borderBottom={"1px solid #e3e3e3"}
       // pos={{ mdDown: "fixed" }}
-      top={0}
       zIndex={"20"}
       bgColor={{ _dark: "black", _light: "white" }}
     >

@@ -61,6 +61,7 @@ const MovieDetailPage = () => {
       <MovieDetailNav onBack={handleBack} />
       <Box
         position={"relative"}
+        left={0}
         color={"white"}
         bgRepeat={"no-repeat"}
         bgPos={{ mdTo2xl: "center" }}
@@ -69,45 +70,50 @@ const MovieDetailPage = () => {
           mdTo2xl: `url(https://image.tmdb.org/t/p/w500${data?.backdrop_path})`,
         }}
         height={{ mdTo2xl: "87vh" }}
+        // w={'100vw'}
+        // pl={'2rem'}
+        
+        // overflowX={'hidden'}
       >
         <HStack
           flexDirection={{ mdDown: "column" }}
+          alignItems={'center'}
           gap={"2rem"}
-          px={{ mdTo2xl: "2rem", mdDown: "1rem" }}
+          // px={{ mdTo2xl: "2rem", mdDown: "1rem" }}
           zIndex={25}
+          // w={'100vw'}
           height={"100%"}
-          pos={"relative"}
           // alignItems={"center"}
           color={{ _light: "black" }}
+          pl={'.5rem'}
         >
           <Card.Root
-            w={{ mdTo2xl: "18rem", mdDown: "16rem" }}
+            // w={{ mdTo2xl: "18rem", mdDown: "16rem" }}
             mt={{ mdDown: "2rem" }}
           >
             <Card.Body>
               <Image
                 zIndex={25}
-                pos={"relative"}
                 objectPosition={"center"}
                 objectFit={"cover"}
                 src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`}
                 height={{ mdTo2xl: "75vh", mdDown: "60vh" }}
                 borderRadius={".5rem"}
-                w={{ mdTo2xl: "100%", mdDown: "100%" }}
+                w={'100%'}
               />
             </Card.Body>
           </Card.Root>
           <Box zIndex={25}>
-            <Stack gap={"1rem"} pos={"relative"}>
-              <Stack pos={"relative"}>
-                <Heading fontSize={{ mdTo2xl: "3xl", mdDown: "2xl" }}>
+            <Stack alignItems={'flex-start'} gap={"1rem"} pos={"relative"}>
+              <Stack>
+                <Heading textWrap={'wrap'} fontSize={{ mdTo2xl: "3xl", mdDown: "xl" }}>
                   {data?.title || data?.name}({data?.release_date?.slice(0, 4)||data?.first_air_date?.slice(0, 4)})
                 </Heading>
                 <Flex
                   gap={"1rem"}
                   wrap={"wrap"}
                   fontWeight={"bold"}
-                  fontSize={{ mdDown: "small" }}
+                  fontSize={{ mdDown: "md" }}
                 >
                   <Text
                     fontWeight={"bold"}
@@ -180,7 +186,7 @@ const MovieDetailPage = () => {
                   What's your <u>Vibe?</u>
                 </Text>
               </Flex>
-              <Flex gap={"1.5rem"} alignItems={"center"}>
+              <Flex gap={"1rem"} alignItems={"center"}>
                 <Box
                   cursor={"pointer"}
                   bgColor={{ _dark: "blue.900", _light: "#e3e3e3" }}
@@ -224,34 +230,36 @@ const MovieDetailPage = () => {
               <Flex direction={"column"}>
                 <Heading fontSize={"2xl"}>Overview</Heading>
                 <Text
-                  maxWidth={{ mdTo2xl: "95ch" }}
-                  overflowWrap={{ mdTo2xl: "break-word" }}
+                wordBreak={'break-word'}
+                  maxWidth={{ mdTo2xl: "95ch"}}
+                  overflowWrap={{ mdTo2xl: "break-word", mdDown : "break-word" }}
                 >
                   {data?.overview}
                 </Text>
               </Flex>
-              <Flex mt={"1rem"} gap={"7rem"}>
-                <Stack>
+              <Flex w={'100%'} my={"1rem"} justify={{mdDown :'space-around'}} gap={{mdTo2xl :"7rem"}}>
+                <Stack alignItems={'center'}>
                   <Text
                     fontSize={"lg"}
                     fontWeight={"bold"}
                     lineHeight={{ mdTo2xl: ".5", mdDown: "1" }}
+                    textAlign={'center'}
                   >
                     {writer?.name}
                   </Text>
-                  <Text lineHeight={"1"}>{writer?.job}</Text>
+                  <Text textAlign={'center'} lineHeight={"1"}>{writer?.job}</Text>
                 </Stack>
-                <Stack>
-                  <Text fontSize={"lg"} fontWeight={"bold"} lineHeight={"1"}>
+                <Stack alignItems={'center'}>
+                  <Text textAlign={'center'} fontSize={"lg"} fontWeight={"bold"} lineHeight={"1"}>
                     {Actors && Actors[0]?.name}
                   </Text>
-                  <Text lineHeight={".5"}>Character</Text>
+                  <Text textAlign={'center'} lineHeight={".5"}>Character</Text>
                 </Stack>
-                <Stack>
-                  <Text fontSize={"lg"} fontWeight={"bold"} lineHeight={"1"}>
+                <Stack alignItems={'center'}>
+                  <Text textAlign={'center'} fontSize={"lg"} fontWeight={"bold"} lineHeight={"1"}>
                     {Actors && Actors[1]?.name}
                   </Text>
-                  <Text lineHeight={".5"}>Character</Text>
+                  <Text textAlign={'center'} lineHeight={".5"}>Character</Text>
                 </Stack>
               </Flex>
             </Stack>
@@ -268,7 +276,8 @@ const MovieDetailPage = () => {
             gap={"1rem"}
             my={"2rem"}
             justifyContent={'flex-start'}
-            ml={'0'}
+            mx={'0'}
+            px={0}
           >
             {Actors?.map((actor) => (
               <Stack alignItems={"center"} flexShrink={0}>
@@ -281,8 +290,8 @@ const MovieDetailPage = () => {
                   borderRadius={"50%"}
                   src={unknown}
                 />}
-                <Text fontWeight={'bold'}>{actor.name}</Text>
-                <Text maxWidth={'20ch'} textAlign={"center"}>{actor.character}</Text>
+                <Text color={{_light : 'black'}} fontWeight={'bold'}>{actor.name}</Text>
+                <Text color={{_light : 'black'}} maxWidth={'20ch'} textAlign={"center"}>{actor.character}</Text>
               </Stack>
             ))}
           </Flex>

@@ -1,5 +1,5 @@
 import { Box, Heading, HStack, Input } from "@chakra-ui/react";
-import { ColorModeButton } from "./ui/color-mode";
+import { ColorModeButton} from "./ui/color-mode";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useRef } from "react";
 
@@ -9,7 +9,6 @@ interface Prop {
 }
 
 const NavBar = ({ onClick, onSubmit }: Prop) => {
-
   const searchRef = useRef<HTMLInputElement>(null);
   return (
     <HStack
