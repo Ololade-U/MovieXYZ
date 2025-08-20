@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Stack, Text } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GenreList from "./components/GenreList";
 import MovieGrid from "./components/MovieGrid";
@@ -37,6 +37,7 @@ const App = () => {
 
   const {data : filteredData} = useSearch(searchEndpoint, page, searchParam)
 
+  const discription = selected == "Movie" ? `${selectedGenre?.name ? selectedGenre.name : ''} Movies` : `${selectedGenre?.name ? selectedGenre.name : ''} Tv Shows`
   const {
     data: movies,
     error,
@@ -84,6 +85,7 @@ const App = () => {
         >
           <GenreList
             genres={genres}
+            selectedGenre={selectedGenre}
             onSelectGenre={(genres) => {
               setSelectedGenre(genres);
               setSearchParam("");
@@ -92,7 +94,6 @@ const App = () => {
           />
         </GridItem>
         <GridItem
-          p={{ mdDown: "0 2rem", smTo2xl: "0 0 2rem" }}
           area={"main"}
           overflowY={"scroll"}
           scrollbar={"hidden"}
@@ -112,6 +113,7 @@ const App = () => {
               </option>
             ))}
           </select>
+          <Heading m={'0 0 1rem 1rem'} fontSize={'2xl'}>{discription}</Heading>
           {movies?.length == 0 && <EmptyPage />}
           {filteredData && movies && error !== undefined && (
             <MovieGrid
