@@ -19,7 +19,8 @@ const Landing = () => {
           opacity={1}
           h={"100%"}
           zIndex={"20"}
-          gap={{ mdTo2xl: "8rem", mdDown: "10rem" }}
+          gap={{ mdTo2xl: "8rem"}}
+          justifyContent={{mdDown : 'space-between'}}
           alignItems={"center"}
           p={{ mdTo2xl: "2rem 7rem", mdDown: "2rem 2rem" }}
         >
