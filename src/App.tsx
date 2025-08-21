@@ -63,7 +63,6 @@ const App = () => {
           area={"nav"}
           overflow={"hidden"}
           py={'.6rem'}
-          // height={"13vh"} 
           borderBottom={"1px solid #e3e3e3"}
           pos={{ mdDown: "fixed" }}
           w={"100%"}
@@ -99,7 +98,7 @@ const App = () => {
           overflowY={"scroll"}
           scrollbar={"hidden"}
           height={{ mdTo2xl: "87vh" }}
-          mt={{ mdDown: "6.1rem", mdTo2xl: "1rem" }}
+          mt={{ mdDown: "4.6rem", mdTo2xl: "1rem" }}
         >
           <select
             onClick={(e) => {
