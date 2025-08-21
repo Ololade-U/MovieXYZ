@@ -148,7 +148,7 @@ const App = () => {
       <Box
         hideFrom={"md"}
         pos={"fixed"}
-        top={"13vh"}
+        top={"3.75rem"}
         left={"-75vw"}
         width={"65vw"}
         height={"100vh"}
