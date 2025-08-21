@@ -62,7 +62,8 @@ const App = () => {
         <GridItem
           area={"nav"}
           overflow={"hidden"}
-          height={"13vh"}
+          py={'.6rem'}
+          // height={"13vh"} 
           borderBottom={"1px solid #e3e3e3"}
           pos={{ mdDown: "fixed" }}
           w={"100%"}
@@ -113,7 +114,7 @@ const App = () => {
               </option>
             ))}
           </select>
-          <Heading m={'0 0 1rem 1rem'} fontSize={'2xl'}>{discription}</Heading>
+          <Heading m={'0 0 1rem 2rem'} fontSize={'2xl'}>{discription}</Heading>
           {movies?.length == 0 && <EmptyPage />}
           {filteredData && movies && error !== undefined && (
             <MovieGrid
