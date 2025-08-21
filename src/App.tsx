@@ -134,7 +134,7 @@ const App = () => {
       {isClicked && (
         <Text
           pos={"fixed"}
-          top={"13vh"}
+          top={"3.75rem"}
           left={0}
           width={"100vw"}
           height={"100vh"}
