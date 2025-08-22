@@ -2,49 +2,28 @@ import { Box, Grid, GridItem, Heading, Stack, Text } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GenreList from "./components/GenreList";
 import MovieGrid from "./components/MovieGrid";
-import { useState } from "react";
-import useGenres, { type Genre } from "./hooks/useGenre";
-import useMovies from "./hooks/useMovies";
-import EmptyPage from "./components/EmptyPage";
+import useGenres from "./hooks/useGenre";
 import Footer from "./components/Footer";
-import useSearch from "./hooks/useSearch";
-
+import useMovieQueryStore from "./components/Store";
 
 const App = () => {
   const Types = ["Movie", "Tv Shows"];
-  const [isClicked, setClicked] = useState(false);
-  const handleClick = () => {
-    isClicked == false ? setClicked(true) : setClicked(false);
-  };
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  const [searchParam, setSearchParam] = useState<string | undefined>("");
-  const [selected, setSelected] = useState("Movie");
-  const { data: genres } = useGenres();
-   const [page, setPage] = useState(1);
 
-  const onNextPage = () => {
-    setPage(page + 1)
-  };
+  const isClicked = useMovieQueryStore((s) => s.MovieQuery.isClicked)
+  const resetClicked = useMovieQueryStore((s) => s.resetClicked);
 
-  const onPrevPage = () => {
-    setPage(page > 1 ? page - 1 : page);
-  };
-  
+  const selectedGenre = useMovieQueryStore((s) => s.MovieQuery.selectedGenre);
+  const setSelectedGenre = useMovieQueryStore((s) => s.setSelectedGenre);
+  const resetPage = useMovieQueryStore((s) => s.resetPage);
+  const setSelectedType = useMovieQueryStore((s) => s.setSelectedType);
+  const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
+  const handleClick = useMovieQueryStore((s) => s.handleClick)
+   const { data: genres } = useGenres()
 
-  const endpoint = selected !== "Movie" ? "discover/tv" : "discover/movie";
-
-  const searchEndpoint = selected !== "Movie" ? "search/tv" : "search/movie"
-
-  const {data : filteredData} = useSearch(searchEndpoint, page, searchParam)
-
-  const discription = selected == "Movie" ? `${selectedGenre?.name ? selectedGenre.name : ''} Movies` : `${selectedGenre?.name ? selectedGenre.name : ''} Tv Shows`
-  const {
-    data: movies,
-    error,
-    isLoading,
-    isRefetching
-  } = useMovies(endpoint, page, selectedGenre);
-
+  const discription =
+    selectedType == "Movie"
+      ? `${selectedGenre?.name ? selectedGenre.name : ""} Movies`
+      : `${selectedGenre?.name ? selectedGenre.name : ""} Tv Shows`;
   return (
     <>
       <Grid
@@ -62,7 +41,7 @@ const App = () => {
         <GridItem
           area={"nav"}
           overflow={"hidden"}
-          py={'.6rem'}
+          py={".6rem"}
           borderBottom={"1px solid #e3e3e3"}
           pos={{ mdDown: "fixed" }}
           w={"100%"}
@@ -70,10 +49,7 @@ const App = () => {
           zIndex={"20"}
           bgColor={{ _dark: "black", _light: "white" }}
         >
-          <NavBar
-            onSubmit={(searchRef) => setSearchParam(searchRef)}
-            onClick={handleClick}
-          />
+          <NavBar />
         </GridItem>
         <GridItem
           hideBelow={"md"}
@@ -83,15 +59,7 @@ const App = () => {
           overflowY={"scroll"}
           height={"87vh"}
         >
-          <GenreList
-            genres={genres}
-            selectedGenre={selectedGenre}
-            onSelectGenre={(genres) => {
-              setSelectedGenre(genres);
-              setSearchParam("");
-              setPage(1)
-            }}
-          />
+          <GenreList />
         </GridItem>
         <GridItem
           area={"main"}
@@ -102,9 +70,10 @@ const App = () => {
         >
           <select
             onClick={(e) => {
-              setSelected(e.currentTarget.value);
-              e.currentTarget.value == 'Tv Shows' && setSelectedGenre(null)
-              setSearchParam('')
+              setSelectedType(e.currentTarget.value);
+              // console.log(e.currentTarget.value)
+              console.log(selectedType);
+              e.currentTarget.value == "Tv Shows" && setSelectedGenre(null);
             }}
           >
             {Types.map((type) => (
@@ -113,22 +82,11 @@ const App = () => {
               </option>
             ))}
           </select>
-          <Heading m={'0 0 1rem 2rem'} fontSize={'2xl'}>{discription}</Heading>
-          {movies?.length == 0 && <EmptyPage />}
-          {filteredData && movies && error !== undefined && (
-            <MovieGrid
-              filteredData={searchParam ? filteredData : movies}
-              movies={movies}
-              error={error}
-              isLoading={isLoading}
-              isRefetching={isRefetching}
-              onNextPage={onNextPage}
-              onPrevPage={onPrevPage}
-              endpoint={selected}
-              page={page}
-            />
-          )}
-          <Footer/>
+          <Heading m={"0 0 1rem 2rem"} fontSize={"2xl"}>
+            {discription}
+          </Heading>{" "}
+          <MovieGrid />
+          <Footer />
         </GridItem>
       </Grid>
       {isClicked && (
@@ -142,7 +100,7 @@ const App = () => {
           zIndex={"40"}
           opacity={0.6}
           hideFrom={"md"}
-          onClick={() => setClicked(false)}
+          onClick={() => resetClicked()}
         ></Text>
       )}
       <Box
@@ -187,7 +145,7 @@ const App = () => {
               onClick={() => {
                 setSelectedGenre(genre);
                 handleClick();
-                setPage(1)
+                resetPage;
               }}
               _hover={{
                 transform: "scale(1.03)",

@@ -1,12 +1,16 @@
 import { Heading, HStack, Input } from "@chakra-ui/react";
 import { ColorModeButton } from "./ui/color-mode";
 import { IoMdArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
-interface Prop{
-  onBack : ()=> void
-}
 
-const MovieDetailNav = ({onBack} : Prop) => {
+
+const MovieDetailNav = () => {
+ const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <HStack
       justifyContent={"space-between"}  
@@ -20,7 +24,7 @@ const MovieDetailNav = ({onBack} : Prop) => {
       zIndex={"20"}
       bgColor={{ _dark: "black", _light: "white" }}
     >
-      <IoMdArrowBack cursor={'pointer'} onClick={onBack} size={'1.5rem'}/>
+      <IoMdArrowBack cursor={'pointer'} onClick={()=> handleBack()} size={'1.5rem'}/>
       <Heading
         color={"red"}
         fontSize={{ mdTo2xl: "3xl", mdDown: "lg" }}

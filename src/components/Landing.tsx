@@ -1,11 +1,9 @@
 import { Box, Button, Heading, HStack, Stack } from "@chakra-ui/react";
 import back from "../assets/mbg4.jpg";
 import { Link } from "react-router-dom";
-import useGenres from "@/hooks/useGenre";
 
 
 const Landing = () => {
-  useGenres()
   return (
     <>
       <Box

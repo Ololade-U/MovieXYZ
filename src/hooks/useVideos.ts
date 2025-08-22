@@ -1,5 +1,7 @@
+import useMovieQueryStore from "@/components/Store";
 import apiClient from "@/services/api-client";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 interface Result{
     name : string
@@ -16,16 +18,18 @@ interface VideoResponse{
 }
 
 
-const useVideos = (
-    endpoint : string,
-    id : number | ""
-)=> {
+const useVideos = ()=> {
+    const params = useParams();
+    const id = params.id ? parseInt(params.id) : "";
 
+    const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
+    const endpoint = selectedType == "Movie" ? `movie/${id}` : `tv/${id}`
+    const videoEndpoint = `${endpoint}/videos`;
  return useQuery({
-    queryKey : ['videos', endpoint],
+    queryKey : ['videos', videoEndpoint],
     queryFn : ()=>
        apiClient
-          .get<VideoResponse>(endpoint, {params : {movie_id : id}})
+          .get<VideoResponse>(videoEndpoint, {params : {movie_id : id}})
           .then((res) => res.data.results),
     staleTime : 60 * 60 * 1000 //1hr
   })

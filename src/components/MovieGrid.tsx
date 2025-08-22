@@ -1,35 +1,31 @@
-import { type Movies } from "@/hooks/useMovies";
+import useMovies from "@/hooks/useMovies";
 import { Button, HStack, SimpleGrid, Text } from "@chakra-ui/react";
 import MovieCard from "./MovieCard";
 import MovieCardSkeleton from "./MovieCardSkeleton";
+import useMovieQueryStore from "./Store";
+import useSearch from "@/hooks/useSearch";
+import EmptyPage from "./EmptyPage";
 
-interface Prop {
-  movies: Movies[];
-  isLoading: boolean;
-  isRefetching: boolean;
-  error: Error | null;
-  filteredData: Movies[];
-  onNextPage: () => void;
-  onPrevPage: () => void;
-  endpoint : string;
-  page : number;
-}
-
-const MovieGrid = ({
-  movies,
-  isRefetching,
-  error,
-  isLoading,
-  filteredData,
-  onNextPage,
-  onPrevPage,
-  endpoint, 
-}: Prop) => {
+const MovieGrid = () => {
   const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
+  const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
+  const searchEndpoint =
+    selectedType !== "Movie" ? "search/tv" : "search/movie";
+  const page = useMovieQueryStore((s) => s.MovieQuery.page);
+  const searchParam = useMovieQueryStore(s => s.MovieQuery.searchParam)
+
+  const { data: movies, error, isLoading, isRefetching } = useMovies();
+
+  const { data: filteredData } = useSearch(searchEndpoint, page, searchParam);
+
+  const onNextPage = useMovieQueryStore((s) => s.onNextPage);
+  const onPrevPage = useMovieQueryStore((s) => s.onPrevPage);
   return (
     <>
       {error && <Text>{error.message}</Text>}
+      {movies?.length == 0 && <EmptyPage />}
+
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 4 }}
         gap={"1rem"}
@@ -40,11 +36,11 @@ const MovieGrid = ({
           : isRefetching
           ? Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)
           : ""}
-        {filteredData?.length > 0
-          ? filteredData.map((movie) => (
-              <MovieCard endpoint={endpoint} key={movie.id} movie={movie} />
+        {searchParam
+          ? filteredData?.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
             ))
-          : movies.map((movie) => <MovieCard endpoint={endpoint} key={movie.id} movie={movie} />)}
+          : movies?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
       </SimpleGrid>
       <HStack mt={"1rem"} justifyContent={"center"}>
         <Button

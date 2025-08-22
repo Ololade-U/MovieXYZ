@@ -1,6 +1,8 @@
 import apiClient from "@/services/api-client";
 import { useQuery } from "@tanstack/react-query";
 import type { Genre } from "./useGenre";
+import useMovieQueryStore from "@/components/Store";
+import { useParams } from "react-router-dom";
 
 
 interface Details{
@@ -21,9 +23,11 @@ interface Details{
 }
 
 
-const useDetails = (
-    endpoint : string
-)=> {
+const useDetails = ()=> {
+const params = useParams();
+  const id = params.id ? parseInt(params.id) : "";
+  const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
+  const endpoint = selectedType == "Movie" ? `movie/${id}` : `tv/${id}`
 
  return useQuery({
     queryKey : ['details', endpoint],

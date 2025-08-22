@@ -2,14 +2,16 @@ import { Box, Heading, HStack, Input } from "@chakra-ui/react";
 import { ColorModeButton} from "./ui/color-mode";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useRef } from "react";
+import useMovieQueryStore from "./Store";
 
-interface Prop {
-  onClick: () => void;
-  onSubmit: (searchRef: string | undefined) => void;
-}
 
-const NavBar = ({ onClick, onSubmit }: Prop) => {
+
+const NavBar = () => {
   const searchRef = useRef<HTMLInputElement>(null);
+  const handleClick = useMovieQueryStore((s) => s.handleClick)
+  const setSearchParam = useMovieQueryStore(s => s.setSearchParam)
+  const selectedType = useMovieQueryStore(s => s.MovieQuery.selectedType)
+
   return (
     <HStack
       justifyContent={"space-between"}
@@ -20,7 +22,7 @@ const NavBar = ({ onClick, onSubmit }: Prop) => {
     >
       <HStack alignItems={"center"}>
         <Box hideFrom={"md"}>
-          <RxHamburgerMenu size={"1.5rem"} onClick={onClick} />
+          <RxHamburgerMenu size={"1.5rem"} onClick={() =>handleClick()} />
         </Box>
         <Heading
           color={"red"}
@@ -36,7 +38,7 @@ const NavBar = ({ onClick, onSubmit }: Prop) => {
         onSubmit={(e) => {
           e.preventDefault();
           if (searchRef.current) {
-            onSubmit(searchRef.current.value);
+            setSearchParam(searchRef.current.value, selectedType);
           }
         }}
       >

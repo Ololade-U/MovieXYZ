@@ -13,7 +13,7 @@ import MovieDetailPage from "./MovieDetailPage";
         <App/>
       ),
     },
-    { path: "/movies/:endpoint/:id/:title", element: <MovieDetailPage /> },
+    { path: "/movies/:id/:title", element: <MovieDetailPage /> },
   ]);
 
   export default router ;

@@ -12,32 +12,33 @@ import {
 
 import tomato from "../assets/icons8-tomato-48.png";
 import { Link } from "react-router-dom";
-import notFound from '../assets/not found.jpg'
+import notFound from "../assets/not found.jpg";
+
 
 interface Prop {
   movie: Movies;
-  endpoint: string;
 }
 
-const MovieCard = ({ movie, endpoint }: Prop) => {
+const MovieCard = ({ movie }: Prop) => {
   const rating = parseInt((movie.vote_average * 10).toFixed(0));
   return (
     <>
       <Card.Root borderRadius={"1rem"} overflow={"hidden"} p={"1rem"}>
-        {movie.poster_path ? 
-        <Image
-          pos={"relative"}
-          objectFit={"contain"}
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          w={"100%"}
-        /> :
-        <Image
-          pos={"relative"}
-          objectFit={"contain"}
-          src={notFound}
-          w={"100%"}
-        />
-      }
+        {movie.poster_path ? (
+          <Image
+            pos={"relative"}
+            objectFit={"contain"}
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            w={"100%"}
+          />
+        ) : (
+          <Image
+            pos={"relative"}
+            objectFit={"contain"}
+            src={notFound}
+            w={"100%"}
+          />
+        )}
         <ProgressCircle.Root
           bgColor={
             rating && rating < 50
@@ -48,8 +49,8 @@ const MovieCard = ({ movie, endpoint }: Prop) => {
           }
           borderRadius={"50%"}
           w={"2.5rem"}
-          color={'black'}
-          fontWeight={'bolder'}
+          color={"black"}
+          fontWeight={"bolder"}
           top={"-1rem"}
           left={".5rem"}
           position={"relative"}
@@ -67,7 +68,7 @@ const MovieCard = ({ movie, endpoint }: Prop) => {
         </ProgressCircle.Root>
         <Card.Body p={0}>
           <Link
-            to={`/movies/${endpoint}/${movie.id}/${movie.title || movie.name}`}
+            to={`/movies/${movie.id}/${movie.title || movie.name}`}
           >
             <Heading fontSize={"1xl"}>
               {movie.title ? movie.title : movie.name}
