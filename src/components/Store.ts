@@ -8,7 +8,8 @@ interface MovieQuery {
   selectedType?: string;
   isClicked?: boolean;
   bookmarked?: number[];
-  bookmarkValue? : number
+  bookmarkValue? : number;
+  sortOrder? : string
 }
 
 interface MovieQueryStore {
@@ -26,6 +27,7 @@ interface MovieQueryStore {
   resetClicked: () => void;
   setBookmark: (id: number) => void;
   removeBookmark : (id : number) => void
+  setSortOrder : (sortOrder : string)=> void
 }
 
 const useMovieQueryStore = create<MovieQueryStore>((set) => ({
@@ -34,7 +36,8 @@ const useMovieQueryStore = create<MovieQueryStore>((set) => ({
     page: 1,
     isClicked: false,
     bookmarked: [],
-    bookmarkValue : 1
+    bookmarkValue : 1,
+    sortOrder : ''
   },
   setSelectedGenre: (selectedGenre) =>
     set((store) => ({
@@ -88,6 +91,9 @@ const useMovieQueryStore = create<MovieQueryStore>((set) => ({
         bookmarkValue : store.MovieQuery.bookmarkValue && store.MovieQuery.bookmarkValue - 1
       },
     })),
+    setSortOrder : (sortOrder) => set((store)=> ({
+      MovieQuery : {...store.MovieQuery, sortOrder : sortOrder, page : 1}
+    }))
 }));
 
 export default useMovieQueryStore;

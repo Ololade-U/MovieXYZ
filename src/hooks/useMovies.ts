@@ -22,14 +22,15 @@ export interface FetchMovieResponse {
 const useMovies = () => {
   const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
   const endpoint = selectedType !== "Movie" ? "discover/tv" : "discover/movie";
+  const sortOrder = useMovieQueryStore((s) => s.MovieQuery.sortOrder);
   const selectedGenre = useMovieQueryStore((s) => s.MovieQuery.selectedGenre);
   const page = useMovieQueryStore((s) => s.MovieQuery.page);
   const { data, error, isLoading, isRefetching } = useQuery<Movies[], Error>({
-    queryKey: ["movies", selectedGenre?.id, endpoint, page],
+    queryKey: ["movies", selectedGenre?.id, endpoint, page, sortOrder],
     queryFn: () =>
       apiClient
         .get<FetchMovieResponse>(endpoint, {
-          params: { with_genres: selectedGenre?.id, page: page },
+          params: { with_genres: selectedGenre?.id, page: page, sort_by : sortOrder},
         })
         .then((res) => res.data.results),
     staleTime: 60 * 30 * 1000, //30mins

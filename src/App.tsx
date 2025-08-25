@@ -5,20 +5,18 @@ import MovieGrid from "./components/MovieGrid";
 import useGenres from "./hooks/useGenre";
 import Footer from "./components/Footer";
 import useMovieQueryStore from "./components/Store";
+import Menu from "./components/Menu";
 
 const App = () => {
-  const Types = ["Movie", "Tv Shows"];
-
-  const isClicked = useMovieQueryStore((s) => s.MovieQuery.isClicked)
+  const isClicked = useMovieQueryStore((s) => s.MovieQuery.isClicked);
   const resetClicked = useMovieQueryStore((s) => s.resetClicked);
 
   const selectedGenre = useMovieQueryStore((s) => s.MovieQuery.selectedGenre);
   const setSelectedGenre = useMovieQueryStore((s) => s.setSelectedGenre);
   const resetPage = useMovieQueryStore((s) => s.resetPage);
-  const setSelectedType = useMovieQueryStore((s) => s.setSelectedType);
   const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
-  const handleClick = useMovieQueryStore((s) => s.handleClick)
-   const { data: genres } = useGenres()
+  const handleClick = useMovieQueryStore((s) => s.handleClick);
+  const { data: genres } = useGenres();
 
   const discription =
     selectedType == "Movie"
@@ -68,7 +66,7 @@ const App = () => {
           height={{ mdTo2xl: "87vh" }}
           mt={{ mdDown: "4.6rem", mdTo2xl: "1rem" }}
         >
-          <select
+          {/* <select
             onClick={(e) => {
               setSelectedType(e.currentTarget.value);
               // console.log(e.currentTarget.value)
@@ -81,10 +79,17 @@ const App = () => {
                 {type}
               </option>
             ))}
-          </select>
-          <Heading m={"0 0 1rem 2rem"} fontSize={"2xl"}>
+          </select> */}
+          <Heading
+            m={{
+              mdTo2xl: ".5rem .5rem 0.7rem",
+              mdDown: ".5rem .5rem .5rem 2.2rem",
+            }}
+            fontSize={"2xl"}
+          >
             {discription}
           </Heading>{" "}
+          <Menu />
           <MovieGrid />
           <Footer />
         </GridItem>
