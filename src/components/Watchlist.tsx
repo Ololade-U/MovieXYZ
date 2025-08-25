@@ -15,7 +15,7 @@ const Watchlist = () => {
 
   return (
     <>
-      {movies?.length == 0 && <EmptyPage />}
+      {watchList?.length == 0 && <EmptyPage />}
       {error && <div>{error.message}</div> }
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 4 }}
