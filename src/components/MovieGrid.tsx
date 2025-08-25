@@ -5,6 +5,7 @@ import MovieCardSkeleton from "./MovieCardSkeleton";
 import useMovieQueryStore from "./Store";
 import useSearch from "@/hooks/useSearch";
 import EmptyPage from "./EmptyPage";
+import {HashLink} from "react-router-hash-link"
 
 const MovieGrid = () => {
   const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
@@ -43,20 +44,24 @@ const MovieGrid = () => {
           : movies?.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
       </SimpleGrid>
       <HStack mt={"1rem"} justifyContent={"center"}>
-        <Button
+        <HashLink to={'#nav-bar'} smooth>
+          <Button
           onClick={() => onPrevPage()}
           variant={"outline"}
           p={".4rem .6rem"}
         >
           Prev Page
         </Button>
-        <Button
+        </HashLink>
+        <HashLink to={'#nav-bar'} smooth>
+          <Button
           onClick={() => onNextPage()}
           variant={"outline"}
           p={".4rem .6rem"}
         >
           Next Page
         </Button>
+        </HashLink>
       </HStack>
     </>
   );

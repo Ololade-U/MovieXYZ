@@ -86,6 +86,7 @@ const App = () => {
               mdDown: ".5rem .5rem .5rem 2.2rem",
             }}
             fontSize={"2xl"}
+            id="nav-bar"
           >
             {discription}
           </Heading>{" "}

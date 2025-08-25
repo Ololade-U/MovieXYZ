@@ -14,15 +14,18 @@ import useDetails from "@/hooks/useDetails";
 import useCredits from "@/hooks/useCredit";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { CiHeart } from "react-icons/ci";
-import { CiBookmark } from "react-icons/ci";
-import { FaPlay } from "react-icons/fa";
+
+import { FaBookmark, FaPlay } from "react-icons/fa";
 import useVideos from "@/hooks/useVideos";
 import { useColorMode } from "./ui/color-mode";
 import unknown from "../assets/Unknown_person.jpg";
-
+import MovieDetailSkeleton from "./MovieDetailSkeleton";
+import useMovieQueryStore from "./Store";
+import { Link } from "react-router-dom";
 
 const Details = () => {
-    const { data } = useDetails();
+  const { data, isLoading } = useDetails();
+  const Skeleton = [1, 2];
 
   const hours = data?.runtime && Math.floor(data?.runtime / 60);
   const minutes = data?.runtime && data?.runtime % 60;
@@ -34,7 +37,6 @@ const Details = () => {
   const rating =
     data?.vote_average && parseInt((data?.vote_average * 10).toFixed(0));
 
-  
   const { data: credits } = useCredits();
   const writer = credits?.crew.find((credit) => credit.department == "Writing");
   const Actors = credits?.cast;
@@ -42,8 +44,16 @@ const Details = () => {
   const trailer = videos?.find((video) =>
     video.name.toLowerCase().includes("official trailer")
   );
+  const bookmarked = useMovieQueryStore((s) => s.MovieQuery.bookmarked);
+  const setBookmark = useMovieQueryStore((s) => s.setBookmark);
+  const bookmarkValue = useMovieQueryStore((s) => s.MovieQuery.bookmarkValue);
+  const removeBookmark = useMovieQueryStore((s) => s.removeBookmark);
   return (
-    <Box
+    <>
+      {isLoading
+        ? Skeleton.map((skeleton) => <MovieDetailSkeleton key={skeleton} />)
+        : ""}
+      <Box
         position={"relative"}
         left={0}
         color={"white"}
@@ -182,6 +192,7 @@ const Details = () => {
                 </Text>
               </Flex>
               <Flex gap={"1rem"} alignItems={"center"}>
+                <Link to={'/movies/watchlist'}>
                 <Box
                   cursor={"pointer"}
                   bgColor={{ _dark: "blue.900", _light: "#e3e3e3" }}
@@ -190,6 +201,7 @@ const Details = () => {
                 >
                   <TfiMenuAlt size={"1.3rem"} />
                 </Box>
+                </Link>
                 <Box
                   cursor={"pointer"}
                   bgColor={{ _dark: "blue.900", _light: "#e3e3e3" }}
@@ -204,7 +216,22 @@ const Details = () => {
                   p={".8rem .8rem"}
                   borderRadius={"50%"}
                 >
-                  <CiBookmark size={"1.3rem"} />
+                  <FaBookmark
+                    onClick={() => {
+                      data && bookmarked?.includes(data.id)
+                        ? removeBookmark(data.id)
+                        : setBookmark(data ? data.id : 0);
+
+                      console.log(bookmarkValue);
+                      console.log(bookmarked);
+                    }}
+                    size={"1.3rem"}
+                    fill={
+                      data && bookmarked?.includes(data.id)
+                        ? "#4242ecff"
+                        : "#e3e3e3"
+                    }
+                  />
                 </Box>
                 <a
                   target="_blank"
@@ -235,14 +262,14 @@ const Details = () => {
               <Flex
                 w={"100%"}
                 my={"1rem"}
-                justify={{ mdDown: "space-around" }}
+                justify={{ mdDown: "space-between" }}
                 gap={{ mdTo2xl: "7rem" }}
               >
                 <Stack alignItems={"center"}>
                   <Text
                     fontSize={"lg"}
                     fontWeight={"bold"}
-                    lineHeight={{ mdTo2xl: ".5", mdDown: "1" }}
+                    lineHeight={1}
                     textAlign={"center"}
                   >
                     {writer?.name}
@@ -331,7 +358,8 @@ const Details = () => {
           zIndex={5}
         ></Text>
       </Box>
-  )
-}
+    </>
+  );
+};
 
-export default Details
+export default Details;
