@@ -7,6 +7,8 @@ interface MovieQuery {
   page?: number;
   selectedType?: string;
   isClicked?: boolean;
+  bookmarked?: number[];
+  bookmarkValue? : number
 }
 
 interface MovieQueryStore {
@@ -22,13 +24,21 @@ interface MovieQueryStore {
   setSelectedType: (selectedType: string) => void;
   handleClick: () => void;
   resetClicked: () => void;
+  setBookmark: (id: number) => void;
+  removeBookmark : (id : number) => void
 }
 
 const useMovieQueryStore = create<MovieQueryStore>((set) => ({
-  MovieQuery: { selectedType: "Movie", page: 1, isClicked: false },
+  MovieQuery: {
+    selectedType: "Movie",
+    page: 1,
+    isClicked: false,
+    bookmarked: [],
+    bookmarkValue : 1
+  },
   setSelectedGenre: (selectedGenre) =>
     set((store) => ({
-      MovieQuery: { ...store.MovieQuery, selectedGenre, page: 1 },
+      MovieQuery: { ...store.MovieQuery, selectedGenre, page: 1, bookmarkValue : 1},
     })),
   setSearchParam: (searchParam, selectedType) =>
     set(() => ({ MovieQuery: { searchParam, selectedType: selectedType } })),
@@ -52,7 +62,7 @@ const useMovieQueryStore = create<MovieQueryStore>((set) => ({
   resetPage: () =>
     set((store) => ({ MovieQuery: { ...store.MovieQuery, page: 1 } })),
   setSelectedType: (selectedType) =>
-    set(() => ({ MovieQuery: { selectedType } })),
+    set((store) => ({ MovieQuery: { ...store.MovieQuery, selectedType } })),
   handleClick: () =>
     set((store) => ({
       MovieQuery: {
@@ -62,6 +72,22 @@ const useMovieQueryStore = create<MovieQueryStore>((set) => ({
     })),
   resetClicked: () =>
     set((store) => ({ MovieQuery: { ...store.MovieQuery, isClicked: false } })),
+  setBookmark: (id) =>
+    set((store) => ({
+      MovieQuery: {
+        ...store.MovieQuery,
+        bookmarked : store.MovieQuery.bookmarked && [...store.MovieQuery.bookmarked, id],
+        bookmarkValue : store.MovieQuery.bookmarkValue && store.MovieQuery.bookmarkValue + 1
+      },
+    })),
+    removeBookmark: (id) =>
+    set((store) => ({
+      MovieQuery: {
+        ...store.MovieQuery,
+        bookmarked : store.MovieQuery.bookmarked && store.MovieQuery.bookmarked.filter((bookid) => id !== bookid ),
+        bookmarkValue : store.MovieQuery.bookmarkValue && store.MovieQuery.bookmarkValue - 1
+      },
+    })),
 }));
 
 export default useMovieQueryStore;

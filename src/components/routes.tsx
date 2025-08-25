@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Landing from "./Landing";
 import App from "@/App";
 import MovieDetailPage from "./MovieDetailPage";
+import Details from "./Details";
+import Watchlist from "./Watchlist";
 
  
 
@@ -13,7 +15,10 @@ import MovieDetailPage from "./MovieDetailPage";
         <App/>
       ),
     },
-    { path: "/movies/:id/:title", element: <MovieDetailPage /> },
+    { path: "/movies", element: <MovieDetailPage />, children : [
+      {path : ':id/:title', element : <Details/>},
+      {path : 'watchlist', element : <Watchlist/>}
+    ]},
   ]);
 
   export default router ;

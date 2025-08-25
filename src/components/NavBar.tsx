@@ -3,6 +3,8 @@ import { ColorModeButton} from "./ui/color-mode";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useRef } from "react";
 import useMovieQueryStore from "./Store";
+import { TfiMenuAlt } from "react-icons/tfi";
+import { Link } from "react-router-dom";
 
 
 
@@ -49,7 +51,12 @@ const NavBar = () => {
           placeholder="Search"
         />
       </form>
+      <HStack alignItems={'center'}>
+      <Link to={'/movies/watchlist'}>
+      <TfiMenuAlt title="Watchlist" size={"1.3rem"} cursor={'pointer'} />
+      </Link>
       <ColorModeButton />
+      </HStack>
     </HStack>
   );
 };
