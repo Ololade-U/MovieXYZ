@@ -1,4 +1,5 @@
 
+import useMovieQueryStore from "@/components/Store";
 import apiClient from "@/services/api-client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,19 +21,21 @@ export interface FetchSearchResponse {
 
 // const [filteredData, setFilteredData] = useState<Movies[]>([])
 
-const useSearch = (
-  endpoint: string,
-  page: number | undefined,
-  searchParam : string | undefined
-) => {
+const useSearch = () => {
+  const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
+  const searchEndpoint =
+      selectedType !== "Movie" ? "search/tv" : "search/movie";
+  const page = useMovieQueryStore((s) => s.MovieQuery.page);
+  const searchParam = useMovieQueryStore(s => s.MovieQuery.searchParam)
+
  return useQuery<
     Movies[],
     Error
   >({
-    queryKey: ["search", searchParam, endpoint, page],
+    queryKey: ["search", searchParam, searchEndpoint, page],
     queryFn: () =>
       apiClient
-        .get<FetchSearchResponse>(endpoint, {
+        .get<FetchSearchResponse>(searchEndpoint, {
           params: { query : searchParam ,  page: page },
         })
         .then((res) => res.data.results),

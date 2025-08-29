@@ -20,7 +20,7 @@ const Watchlist = () => {
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 4 }}
         gap={"1rem"}
-        p={{ mdDown: "0 2rem", smTo2xl: "0 0 2rem" }}
+        p={{ mdDown: "2rem", smTo2xl: "1rem 1rem 2rem" }}
       >
         {isLoading
           ? Skeleton.map((skeleton) => <MovieCardSkeleton key={skeleton} />)

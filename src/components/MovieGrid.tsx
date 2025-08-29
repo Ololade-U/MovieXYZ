@@ -10,15 +10,11 @@ import {HashLink} from "react-router-hash-link"
 const MovieGrid = () => {
   const Skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
-  const selectedType = useMovieQueryStore((s) => s.MovieQuery.selectedType);
-  const searchEndpoint =
-    selectedType !== "Movie" ? "search/tv" : "search/movie";
-  const page = useMovieQueryStore((s) => s.MovieQuery.page);
   const searchParam = useMovieQueryStore(s => s.MovieQuery.searchParam)
 
   const { data: movies, error, isLoading, isRefetching } = useMovies();
 
-  const { data: filteredData } = useSearch(searchEndpoint, page, searchParam);
+  const { data: filteredData } = useSearch();
 
   const onNextPage = useMovieQueryStore((s) => s.onNextPage);
   const onPrevPage = useMovieQueryStore((s) => s.onPrevPage);
